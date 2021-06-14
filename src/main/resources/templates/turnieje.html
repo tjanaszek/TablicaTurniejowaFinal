@@ -15,56 +15,51 @@
       letter-spacing: 3px;
     }
     form{
-      text-align: center;
-      width: 30%;
-      margin-top: 100px;
-      margin-left: 35%;
-      background: white;
-      box-shadow: 1px 1px 5px #6a7b8b;
-      border-radius: 5px;
-    }
-    p{
-      padding-top: 20px;
-      text-align: center;
-    }
-    input {
-      margin: 20px;
-      width: 60%;
-    }
-
-    h3{
-            //width: 60%;
-            height: 20px;
-            margin: 40px 0 40px 20%;
+            text-align: center;
+            width: 30%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-top: 100px;
+            margin-left: 35%;
+            background: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            border-radius: 5px;
         }
-     a{
-     color: white;
-     text-decoration: none;
-     border-radius: 5px;
-     background-color:#6a7b8b;
-     margin-left: 50px;
-     padding: 5px;
-     box-shadow: 1px 1px 5px #6a7b8b;
-     letter-spacing: 2px;
-     font-size: 16px;
-     font-family: Montserrat;
-     }
+        p{
+            padding-top: 20px;
+            text-align: center;
+        }
+        input {
+            margin: 20px;
+            width: 60%;
+        }
+
+        .button{
+            font-family: Montserrat;
+            border-radius: 5px;
+            background-color:#6a7b8b;
+            color: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            width: 60%;
+            height: 30px;
+            margin-top: 20px;
+        }
 
   </style>
 </head>
 <body>
 <h1>Turnieje</h1>
-<form action="#" data-th-action="@{/closeRegister}" method="post">
+<form action="#" data-th-action="@{/closeRegister}" method="post" th:name="action">
 <select th:name="id">
 <tr th:each="tournament: ${tournaments}">
     <option th:value="${tournament.getName()}"><td th:text="${tournament.getName()}"></td>
     <td th:text="${tournament.getPlayers()}"></td>
     <td th:text="${tournament.isOpen()}"></td>
-<!--    <a th:href="@{/joinAsAdmin}">Dołącz</a>-->
-    <br><br>
 </tr>
 </select>
-    <button type="submit" >Zakończ rejestrację</button>
+    <br>
+    <button class="button" type="submit"  name="action" value="close">Zakończ rejestrację</button>
+    <button class="button" type="submit" name="action" value="join">Dołącz do turnieju</button>
 </form>
 </body>
 </html>
