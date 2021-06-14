@@ -49,34 +49,6 @@ public class TournamentJDBCDAO {
 
     }
 
-        public void closeRegister(String name) {
-
-        try {
-            String queryString = "UPDATE tournament SET is_open=false WHERE name=?";
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, name);
-            ptmt.executeUpdate();
-            System.out.println("Table Updated Successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            }
-
-            catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-
-            }
-        }
-    }
-
 //    public void update(TournamentBean tournamentBean) {
 //
 //        try {
@@ -160,5 +132,32 @@ public class TournamentJDBCDAO {
             }
         }
         return tournaments;
+    }
+    public void closeRegister(String name) {
+
+        try {
+            String queryString = "UPDATE tournament SET is_open=false WHERE name=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setString(1, name);
+            ptmt.executeUpdate();
+            System.out.println("Table Updated Successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            }
+
+            catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
     }
 }

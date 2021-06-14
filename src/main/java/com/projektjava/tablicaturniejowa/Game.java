@@ -1,14 +1,32 @@
 package com.projektjava.tablicaturniejowa;
 
-import java.io.Serializable;
+import javax.persistence.*;
+import javax.swing.text.StyledEditorKit;
 
-public class Game implements Serializable {
+@Entity
+@Table(name = "game")
+public class Game {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int idGame;
+
+    @Column(nullable = false)
     int idTournament;
+
+    @Column(nullable = false)
     int idPlayer1;
-    int idPlayer2;
+
+    @Column(nullable = true)
     int resultPlayer1;
+
+    @Column(nullable = false)
+    int idPlayer2;
+
+    @Column(nullable = true)
     int resultPlayer2;
+
+    @Column(nullable = true)
     int result;
 
     public Game() {
