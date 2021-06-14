@@ -156,6 +156,7 @@ public class UserJDBCDAO {
 
     public void updatetournamentforuser(String userName, String id) {
         try {
+            creategames(id, userName);
             String queryString = "UPDATE users SET id_t=? WHERE user_name=?";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
@@ -180,5 +181,63 @@ public class UserJDBCDAO {
             }
         }
         //return user;
+    }
+
+    public void creategames(String id, String username) {
+        User temp = findUserName(username);
+        try {
+            String queryString = "SELECT * FROM users WHERE id_t = ?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, Integer.parseInt(id));
+            resultSet = ptmt.executeQuery();
+            while (resultSet.next()) {
+                System.out.println("Imie " + resultSet.getString("name")
+                        + ", nazwisko " + resultSet.getString("surname") + ", nick "
+                        + resultSet.getString("user_name") + ", haslo "
+                        + resultSet.getString("password") + ", ID "
+                        + resultSet.getInt("id_u"));
+
+                try {
+                    String queryString1 = "INSERT INTO game(id_t, id_p1, id_p2) VALUES(?,?,?)";
+                    connection = getConnection();
+                    ptmt = connection.prepareStatement(queryString1);
+                    ptmt.setInt(1, Integer.parseInt(id));
+                    ptmt.setInt(2, resultSet.getInt("id_u"));
+                    ptmt.setInt(3, temp.getidUser());
+                    ptmt.executeUpdate();
+                    System.out.println("Data Added Successfully");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (ptmt != null)
+                            ptmt.close();
+                        if (connection != null)
+                            connection.close();
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
