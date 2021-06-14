@@ -160,4 +160,33 @@ public class TournamentJDBCDAO {
             }
         }
     }
+
+    public ArrayList<TournamentBean> findAllOpen() {
+        ArrayList<TournamentBean> tournaments = new ArrayList<>();
+        try {
+            String queryString = "SELECT * FROM tournament WHERE is_open = 1";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            resultSet = ptmt.executeQuery();
+            while (resultSet.next()) {
+                tournaments.add(new TournamentBean(resultSet.getInt("id_t"), resultSet.getString("name"), resultSet.getBoolean("is_open"), resultSet.getInt("players")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return tournaments;
+    }
 }
