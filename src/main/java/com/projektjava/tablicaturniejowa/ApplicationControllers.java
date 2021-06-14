@@ -8,8 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class ApplicationControllers {
 
-    /*@Autowired
-    private UserRepository userRepo;*/
 
     UserJDBCDAO userRepo = new UserJDBCDAO();
     TournamentJDBCDAO tournamentJDBCDAO = new TournamentJDBCDAO();
@@ -39,30 +37,12 @@ public class ApplicationControllers {
             return "bladlogowania";
     }
 
-    /*@GetMapping("/rejestracja")
-    public String registerStart(Model model){
-        model.addAttribute("user", new User());
-        return "rejestracja";
-    }*/
-
     @PostMapping("/rejestracja")
     public String registerPage(User user) {
         if (userRepo.add(user))
             return "index";
         else
             return "nickistnieje";
-    }
-
-    @GetMapping("/loginOrRegister")
-    public String loginOrRegister(@RequestParam(value="action", required=true) String action, Model model) {
-        if (action.equals("login")) {
-            model.addAttribute("user", new User());
-            return "redirect:/logowanie";
-        } else if (action.equals("register")) {
-            model.addAttribute("user", new User());
-            return "redirect:/rejestracja";
-        }
-        return "loginOrRegister";
     }
 
     @GetMapping("/register")
@@ -111,9 +91,16 @@ public class ApplicationControllers {
         return "turnieje";
     }
     @RequestMapping("/closeRegister")
-    public String closeRegister(@RequestParam(value="id", required=true) String id, Model model){
-        System.out.println(id);
-        tournamentJDBCDAO.closeRegister(id);
+    public String closeRegister(@RequestParam(value="id", required=true) String id, @RequestParam(value="action", required=true) String action, Model model){
+        if(action.equals("close")) {
+            System.out.println("Zamknięto rejestrację");
+            tournamentJDBCDAO.closeRegister(id);
+        }
+        else if(action.equals("join")){
+            System.out.println("Dołączono do turnieju");
+            //dołącz do turnieju
+            tournamentJDBCDAO.closeRegister(id);
+        }
         model.addAttribute("tournaments", tournamentJDBCDAO.findAll());
         return "turnieje";
     }
