@@ -44,6 +44,7 @@ public class ApplicationControllers {
     @PostMapping("/rejestracja")
     public String registerPage(User user) {
         userRepo.add(user);
+        System.out.println("Siema");
         return "index";
     }
 
