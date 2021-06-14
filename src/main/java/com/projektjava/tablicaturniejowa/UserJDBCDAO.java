@@ -155,16 +155,14 @@ public class UserJDBCDAO {
     }
 
     public void updatetournamentforuser(String userName, String id) {
-        User user = new User();
         try {
-            //String queryString = "SELECT * FROM users where user_name = '"+ userName+ "'";
-            String queryString = "UPDATE users SET id_t = "+ id + " WHERE user_name = '" + userName + "'";
+            String queryString = "UPDATE users SET id_t=? WHERE user_name=?";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
-            resultSet = ptmt.executeQuery();
-            resultSet.next();
-            //user = new User(resultSet.getString("name"), resultSet.getString("surname"), resultSet.getString("user_name"), resultSet.getString("password"), resultSet.getInt("id_u"),resultSet.getInt("admin") );
-
+            ptmt.setInt(1, Integer.parseInt(id));
+            ptmt.setString(2, userName);
+            ptmt.executeUpdate();
+            System.out.println("Table Updated Successfully");
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

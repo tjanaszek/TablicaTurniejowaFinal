@@ -57,7 +57,7 @@
 <form action="#" data-th-action="@{/rejestrujnaturniej}" method="post">
   <select th:name="id">
     <tr th:each="tournament: ${tournaments}">
-      <option th:value="${tournament.getName()}"><td th:text="${tournament.getName()}"></td>
+      <option th:value="${tournament.getIdTournament()}"><td th:text="${tournament.getName()}"></td>
         <td th:text="${tournament.getPlayers()}"></td>
         <td th:text="${tournament.isOpen()}"></td>
         <!--    <a th:href="@{/joinAsAdmin}">Dołącz</a>-->
