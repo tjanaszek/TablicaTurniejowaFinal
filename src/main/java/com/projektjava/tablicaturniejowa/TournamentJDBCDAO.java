@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class TournamentJDBCDAO {
     Connection connection = null;
@@ -46,6 +47,34 @@ public class TournamentJDBCDAO {
 
         }
 
+    }
+
+        public void closeRegister(String name) {
+
+        try {
+            String queryString = "UPDATE tournament SET is_open=false WHERE name=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setString(1, name);
+            ptmt.executeUpdate();
+            System.out.println("Table Updated Successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            }
+
+            catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+        }
     }
 
 //    public void update(TournamentBean tournamentBean) {
@@ -104,16 +133,15 @@ public class TournamentJDBCDAO {
 //
 //    }
 
-    public void findAll() {
+    public ArrayList<TournamentBean> findAll() {
+        ArrayList<TournamentBean> tournaments = new ArrayList<>();
         try {
             String queryString = "SELECT * FROM tournament";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             resultSet = ptmt.executeQuery();
             while (resultSet.next()) {
-                System.out.println("id_t " + resultSet.getInt("id_t")
-                        + ", is_open " + resultSet.getString("is_open") + ", players "
-                        + resultSet.getString("players"));
+                tournaments.add(new TournamentBean(resultSet.getInt("id_t"), resultSet.getString("name"), resultSet.getBoolean("is_open"), resultSet.getInt("players")));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -131,5 +159,6 @@ public class TournamentJDBCDAO {
                 e.printStackTrace();
             }
         }
+        return tournaments;
     }
 }

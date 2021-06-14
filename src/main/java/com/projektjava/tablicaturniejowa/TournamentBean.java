@@ -11,14 +11,6 @@ public class TournamentBean implements Serializable {
     public TournamentBean() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public TournamentBean(int idTournament, String name, boolean isOpen, int players) {
         this.name=name;
         this.idTournament = idTournament;
@@ -48,5 +40,13 @@ public class TournamentBean implements Serializable {
 
     public void setPlayers(int players) {
         this.players = players;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

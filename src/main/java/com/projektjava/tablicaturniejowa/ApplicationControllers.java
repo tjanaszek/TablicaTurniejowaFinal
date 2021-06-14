@@ -94,10 +94,9 @@ public class ApplicationControllers {
     }
 
     //Akcje na stronie admina
-    @GetMapping("/rejestracjaTurnieju")
+    @GetMapping("/registerTournament")
     public String registerTournament(Model model) {
         model.addAttribute("tournament", new TournamentBean());
-//        tournamentJDBCDAO.add(tournament);
         return "rejestracjaTurnieju";
     }
 
@@ -105,6 +104,18 @@ public class ApplicationControllers {
     public String addTournament(TournamentBean tournament){
         tournamentJDBCDAO.add(tournament);
         return "stronaadmina";
+    }
+    @RequestMapping("/allTournaments")
+    public String allTournaments(Model model){
+        model.addAttribute("tournaments", tournamentJDBCDAO.findAll());
+        return "turnieje";
+    }
+    @RequestMapping("/closeRegister")
+    public String closeRegister(@RequestParam(value="id", required=true) String id, Model model){
+        System.out.println(id);
+        tournamentJDBCDAO.closeRegister(id);
+        model.addAttribute("tournaments", tournamentJDBCDAO.findAll());
+        return "turnieje";
     }
 
 }
