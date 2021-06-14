@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <style type="text/css">
+        body{
+            text-align: center;
+            background: darkgray;
+            font-family: Montserrat;
+        }
+        h1{
+            margin-top: 30px;
+            letter-spacing: 3px;
+        }
+        form{
+            text-align: center;
+            width: 30%;
+            margin-top: 100px;
+            margin-left: 35%;
+            background: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            border-radius: 5px;
+        }
+        p{
+            padding-top: 20px;
+            text-align: center;
+        }
+        input {
+            margin: 20px;
+            width: 60%;
+        }
+
+        .button{
+            font-family: Montserrat;
+            border-radius: 5px;
+            background-color:#6a7b8b;
+            color: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            width: 40%;
+            height: 30px;
+        }
+
+    </style>
+</head>
+<body>
+<h1>Logowanie</h1>
+<!--Do zrobienia akcja sprawdzająca poprawność i w zależności
+od niej przekierowująca na panel użytkownika lub wyświetlająca info o błędzie-->
+<form action="#" data-th-action="@{/logowanie}" th:object="${user}" method="post">
+    <p>Nazwa użytkownika</p>
+    <input type="text" th:field="*{user_name}" required>
+    <p>Hasło</p>
+    <input type="password" th:field="*{password}" required>
+    <input class="button" type="submit" value="ZALOGUJ SIĘ">
+
+</form>
+</body>
+</html>
