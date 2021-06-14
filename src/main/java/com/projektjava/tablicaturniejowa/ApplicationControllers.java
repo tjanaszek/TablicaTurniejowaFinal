@@ -21,6 +21,9 @@ public class ApplicationControllers {
     @RequestMapping("/logowanie")
     public String loginPage(User user, Model model) {
         User curr = userRepo.findUserName(user.user_name);
+        if (curr.getuser_name() == null){
+            return "nieznanyuser";
+        }
         if (curr.getpassword().equals(user.password)){
             if (curr.getadmin() == 1){
                 model.addAttribute("administrator", curr);
@@ -43,9 +46,10 @@ public class ApplicationControllers {
 
     @PostMapping("/rejestracja")
     public String registerPage(User user) {
-        userRepo.add(user);
-        System.out.println("Siema");
-        return "index";
+        if (userRepo.add(user))
+            return "index";
+        else
+            return "nickistnieje";
     }
 
     @GetMapping("/loginOrRegister")
@@ -70,6 +74,22 @@ public class ApplicationControllers {
     public String loginStart(Model model){
         model.addAttribute("user", new User());
         return "logowanie";
+    }
+
+    @RequestMapping("/zledane")
+    public String backtologin(Model model){
+        model.addAttribute("user", new User());
+        return "logowanie";
+    }
+
+    @RequestMapping("/unknownuser")
+    public String backtoindex(){
+        return "index";
+    }
+
+    @RequestMapping("/nicktaken")
+    public String backtoreg(){
+        return "index";
     }
 
     //akcja do przycisku "Zaloguj"

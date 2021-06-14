@@ -59,34 +59,40 @@ public class UserJDBCDAO {
     }*/
 
     /*public void add(UserBean userBean) {*/
-    public void add(User userBean) {
-        try {
-            String queryString = "INSERT INTO users(name, surname, user_name, password, admin) VALUES(?,?,?,?,?)";
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setString(1, userBean.getname());
-            ptmt.setString(2, userBean.getsurname());
-            ptmt.setString(3, userBean.getuser_name());
-            ptmt.setString(4, userBean.getpassword());
-            ptmt.setInt(5, userBean.getadmin());
-            ptmt.executeUpdate();
-            System.out.println("Data Added Successfully");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
+    public boolean add(User userBean) {
+        User temp = findUserName(userBean.user_name);
+        if (temp.user_name == null) {
             try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
+                String queryString = "INSERT INTO users(name, surname, user_name, password, admin) VALUES(?,?,?,?,?)";
+                connection = getConnection();
+                ptmt = connection.prepareStatement(queryString);
+                ptmt.setString(1, userBean.getname());
+                ptmt.setString(2, userBean.getsurname());
+                ptmt.setString(3, userBean.getuser_name());
+                ptmt.setString(4, userBean.getpassword());
+                ptmt.setInt(5, userBean.getadmin());
+                ptmt.executeUpdate();
+                System.out.println("Data Added Successfully");
             } catch (SQLException e) {
                 e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } finally {
+                try {
+                    if (ptmt != null)
+                        ptmt.close();
+                    if (connection != null)
+                        connection.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
-
+            return true;
         }
-
+        else {
+            return false;
+        }
     }
 
     public void findAll() {
