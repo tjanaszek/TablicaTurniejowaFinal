@@ -4,13 +4,23 @@ import java.io.Serializable;
 
 public class TournamentBean implements Serializable {
     int idTournament;
+    String name;
     boolean isOpen;
     int players;
 
     public TournamentBean() {
     }
 
-    public TournamentBean(int idTournament, boolean isOpen, int players) {
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public TournamentBean(int idTournament, String name, boolean isOpen, int players) {
+        this.name=name;
         this.idTournament = idTournament;
         this.isOpen = isOpen;
         this.players = players;

@@ -12,6 +12,7 @@ public class ApplicationControllers {
     private UserRepository userRepo;*/
 
     UserJDBCDAO userRepo = new UserJDBCDAO();
+    TournamentJDBCDAO tournamentJDBCDAO = new TournamentJDBCDAO();
 
     @RequestMapping("/")
     public String get(Model model) {
@@ -92,26 +93,18 @@ public class ApplicationControllers {
         return "index";
     }
 
-    //akcja do przycisku "Zaloguj"
-//    @RequestMapping("/login")
-//    public String login(@RequestParam(value="action", required=true) String action) {
-//        if (action.equals("login")) {
-//            return "redirect:/logowanie";
-//        } else if (action.equals("register")) {
-//            return "redirect:/rejestracja";
-//        }
-//        return "login";
-//    }
+    //Akcje na stronie admina
+    @GetMapping("/rejestracjaTurnieju")
+    public String registerTournament(Model model) {
+        model.addAttribute("tournament", new TournamentBean());
+//        tournamentJDBCDAO.add(tournament);
+        return "rejestracjaTurnieju";
+    }
 
-    //akcja do przycisku "Zarejestruj się"
-//    @RequestMapping("/login")
-//    public String login(@RequestParam(value="action", required=true) String action) {
-//        if (action.equals("login")) {
-//            return "redirect:/logowanie";
-//        } else if (action.equals("register")) {
-//            return "redirect:/rejestracja";
-//        }
-//        return "login";
-//    }
+    @RequestMapping("/dodajTurniej")
+    public String addTournament(TournamentBean tournament){
+        tournamentJDBCDAO.add(tournament);
+        return "stronaadmina";
+    }
 
 }

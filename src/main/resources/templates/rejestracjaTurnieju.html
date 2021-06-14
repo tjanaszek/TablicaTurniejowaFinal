@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <title>Logowanie</title>
-  <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
-  <style type="text/css">
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
     body{
       text-align: center;
       background: darkgray;
@@ -45,12 +44,9 @@
   </style>
 </head>
 <body>
-<h1>Zalogowano jako admin</h1>
-<form action="#" data-th-action="@{/rejestracjaTurnieju}"  method="get">
-<!--  <p>Nazwa turnieju:<input type="text" th:field="*{name}" required></p>-->
-  <input class="button" type="submit" value="DODAJ TURNIEJ">
-
-<!--</form>-->
-
+<form action="#" data-th-action="@{/dodajTurniej}" th:object="${tournament}" method="post">
+  <p>Nazwa turnieju:<input type="text" th:field="*{name}" required></p>
+    <input class="button" type="submit" value="DODAJ TURNIEJ">
+</form>
 </body>
 </html>

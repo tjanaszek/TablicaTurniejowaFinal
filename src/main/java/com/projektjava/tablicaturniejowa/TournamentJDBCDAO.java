@@ -22,12 +22,12 @@ public class TournamentJDBCDAO {
 
     public void add(TournamentBean tournamentBean) {
         try {
-            String queryString = "INSERT INTO tournament(id_t, is_open, players) VALUES(?,?,?)";
+            String queryString = "INSERT INTO tournament(name, is_open, players) VALUES(?,?,?)";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
-            ptmt.setInt(1, tournamentBean.getIdTournament());
-            ptmt.setBoolean(2, tournamentBean.isOpen());
-            ptmt.setInt(3, tournamentBean.getPlayers());
+            ptmt.setString(1, tournamentBean.getName());
+            ptmt.setBoolean(2, true);
+            ptmt.setInt(3, 0);
             ptmt.executeUpdate();
             System.out.println("Data Added Successfully");
         } catch (SQLException e) {
