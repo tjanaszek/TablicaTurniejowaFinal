@@ -101,12 +101,11 @@ public class UserJDBCDAO {
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             resultSet = ptmt.executeQuery();
+            resultSet.next();
             while (resultSet.next()) {
-                System.out.println("Imie " + resultSet.getString("name")
-                        + ", nazwisko " + resultSet.getString("surname") + ", nick "
-                        + resultSet.getString("user_name") + ", haslo "
-                        + resultSet.getString("password") + ", ID "
-                        + resultSet.getInt("id_u"));
+                if(resultSet.getInt("admin")==0){
+
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
