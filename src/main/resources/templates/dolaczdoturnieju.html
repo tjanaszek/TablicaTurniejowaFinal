@@ -32,24 +32,39 @@
       width: 60%;
     }
 
-    .button{
-      font-family: Montserrat;
+    h3{
+    //width: 60%;
+      height: 20px;
+      margin: 40px 0 40px 20%;
+    }
+    a{
+      color: white;
+      text-decoration: none;
       border-radius: 5px;
       background-color:#6a7b8b;
-      color: white;
+      margin-left: 50px;
+      padding: 5px;
       box-shadow: 1px 1px 5px #6a7b8b;
-      width: 40%;
-      height: 30px;
+      letter-spacing: 2px;
+      font-size: 16px;
+      font-family: Montserrat;
     }
 
   </style>
 </head>
 <body>
-<h1>Zalogowano jako zawodnik</h1>
-<form action="#" data-th-action="@{/playerAction}"  method="get">
-  <!--  <p>Nazwa turnieju:<input type="text" th:field="*{name}" required></p>-->
-  <h3><a th:href="@{/zapiszsie}">ZAPISY DO TURNIEJÓW</a></h3>
-
+<h1>Turnieje</h1>
+<form action="#" data-th-action="@{/rejestrujnaturniej}" method="post">
+  <select th:name="id">
+    <tr th:each="tournament: ${tournaments}">
+      <option th:value="${tournament.getName()}"><td th:text="${tournament.getName()}"></td>
+        <td th:text="${tournament.getPlayers()}"></td>
+        <td th:text="${tournament.isOpen()}"></td>
+        <!--    <a th:href="@{/joinAsAdmin}">Dołącz</a>-->
+        <br><br>
+    </tr>
+  </select>
+  <button type="submit" >Zapisz się</button>
 </form>
 </body>
 </html>

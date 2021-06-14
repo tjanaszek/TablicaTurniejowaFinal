@@ -14,6 +14,8 @@ public class ApplicationControllers {
     UserJDBCDAO userRepo = new UserJDBCDAO();
     TournamentJDBCDAO tournamentJDBCDAO = new TournamentJDBCDAO();
 
+    User currentUser = new User();
+
     @RequestMapping("/")
     public String get(Model model) {
         model.addAttribute("name","Anonymous");
@@ -22,6 +24,7 @@ public class ApplicationControllers {
     @RequestMapping("/logowanie")
     public String loginPage(User user, Model model) {
         User curr = userRepo.findUserName(user.user_name);
+        currentUser = curr;
         if (curr.getuser_name() == null){
             return "nieznanyuser";
         }
@@ -118,4 +121,17 @@ public class ApplicationControllers {
         return "turnieje";
     }
 
+    //na stronie zawodnika
+    @RequestMapping("/rejestrujnaturniej")
+    public String regtotour(@RequestParam(value="id", required=true) String id, Model model){
+        userRepo.updatetournamentforuser(currentUser.getuser_name(), id);
+        System.out.println(currentUser.getuser_name());
+        return "stronazawodnika";
+    }
+
+    @RequestMapping("/zapiszsie")
+    public String showtournamentstosign(Model model){
+        model.addAttribute("tournaments", tournamentJDBCDAO.findAllOpen());
+        return "dolaczdoturnieju";
+    }
 }
