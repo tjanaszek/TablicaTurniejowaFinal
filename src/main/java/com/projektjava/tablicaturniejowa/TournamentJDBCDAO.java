@@ -48,31 +48,6 @@ public class TournamentJDBCDAO {
 
     }
 
-    public void updatePlayers(Tournament tournament){
-        try {
-            String queryString = "UPDATE tournament SET players = ? WHERE id_t = ?";
-            connection = getConnection();
-            ptmt = connection.prepareStatement(queryString);
-            ptmt.setInt(1, tournament.getPlayers()+1);
-            ptmt.setInt(2, tournament.getIdTournament());
-            ptmt.executeUpdate();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (ptmt != null)
-                    ptmt.close();
-                if (connection != null)
-                    connection.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
 //    public void update(TournamentBean tournamentBean) {
 //
 //        try {
