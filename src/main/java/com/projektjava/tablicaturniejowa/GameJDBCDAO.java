@@ -12,6 +12,7 @@ public class GameJDBCDAO {
     Connection connection = null;
     PreparedStatement ptmt = null;
     ResultSet resultSet = null;
+    ResultSet resultSetTemp = null;
 
     public GameJDBCDAO() {
 
@@ -57,16 +58,17 @@ public class GameJDBCDAO {
     public ArrayList<Game> findAllGames(int id) {
         ArrayList<Game> games = new ArrayList<>();
         try {
-            String queryString = "SELECT * FROM game WHERE id_p1 = ? AND result_p1 IS NULL AND game_result IS NOT NULL";
+            String queryString = "SELECT * FROM game WHERE id_p1 = ? AND result_p1 IS NULL AND game_result IS NULL";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, id);
             resultSet = ptmt.executeQuery();
             while (resultSet.next()) {
-                System.out.println("Tutaj");
-                games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+                if (!(isTournamentOpen(resultSet.getInt("id_t")))) {
+                    games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"), resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+                }
             }
-            queryString = "SELECT * FROM game WHERE id_p2 = ? AND result_p2 IS NULL AND game_result IS NOT NULL";
+            queryString = "SELECT * FROM game WHERE id_p2 = ? AND result_p2 IS NULL AND game_result IS NULL";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, id);
@@ -128,7 +130,7 @@ public class GameJDBCDAO {
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             if(result.equals("przegrana"))
-                ptmt.setInt(1, 0);
+                ptmt.setInt(1, -1);
             else if(result.equals("remis"))
                 ptmt.setInt(1, 1);
             else if(result.equals("wygrana"))
@@ -141,7 +143,7 @@ public class GameJDBCDAO {
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             if(result.equals("przegrana"))
-                ptmt.setInt(1, 0);
+                ptmt.setInt(1, -1);
             else if(result.equals("remis"))
                 ptmt.setInt(1, 1);
             else if(result.equals("wygrana"))
@@ -150,12 +152,72 @@ public class GameJDBCDAO {
             ptmt.setInt(3, idGame);
             ptmt.executeUpdate();
             System.out.println("Table Updated Successfully");
+            addgameresult(idGame);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
             try {
                 if (resultSet != null)
                     resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void addgameresult(int idGame){
+        try {
+            String queryString = "SELECT * FROM game WHERE id_g=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, idGame);
+            resultSetTemp = ptmt.executeQuery();
+            resultSetTemp.next();
+            Integer idWygrany;
+            if(resultSetTemp.getInt("result_p1")==3 && resultSetTemp.getInt("result_p2")==-1){
+                idWygrany=resultSetTemp.getInt("id_p1");
+                queryString = "UPDATE game SET game_result=? WHERE id_g=?";
+                connection = getConnection();
+                ptmt = connection.prepareStatement(queryString);
+                ptmt.setInt(1, idWygrany);
+                ptmt.setInt(2, idGame);
+                ptmt.executeUpdate();
+                System.out.println("Table Updated Successfully");
+            }
+            else if(resultSetTemp.getInt("result_p1")==-1 && resultSetTemp.getInt("result_p2")==3){
+                idWygrany=resultSetTemp.getInt("id_p2");
+                queryString = "UPDATE game SET game_result=? WHERE id_g=?";
+                connection = getConnection();
+                ptmt = connection.prepareStatement(queryString);
+                ptmt.setInt(1, idWygrany);
+                ptmt.setInt(2, idGame);
+                ptmt.executeUpdate();
+                System.out.println("Table Updated Successfully");
+            }
+            else if(resultSetTemp.getInt("result_p1")==1 && resultSetTemp.getInt("result_p2")==1){
+                idWygrany=1;
+                queryString = "UPDATE game SET game_result=? WHERE id_g=?";
+                connection = getConnection();
+                ptmt = connection.prepareStatement(queryString);
+                ptmt.setInt(1, idWygrany);
+                ptmt.setInt(2, idGame);
+                ptmt.executeUpdate();
+                System.out.println("Table Updated Successfully");
+            }
+
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSetTemp != null)
+                    resultSetTemp.close();
                 if (ptmt != null)
                     ptmt.close();
                 if (connection != null)
@@ -204,7 +266,7 @@ public class GameJDBCDAO {
             ptmt.setInt(1, id);
             resultSet = ptmt.executeQuery();
             resultSet.next();
-            game=(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+            game=(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p1"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -223,6 +285,36 @@ public class GameJDBCDAO {
             }
         }
         return game;
+    }
+
+    public boolean isTournamentOpen(int id){
+        boolean isopen=false;
+        try {
+            String queryString = "SELECT * FROM tournament WHERE id_t=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, id);
+            resultSetTemp = ptmt.executeQuery();
+            resultSetTemp.next();
+            isopen=resultSetTemp.getBoolean("is_open");
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSetTemp != null)
+                    resultSetTemp.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return isopen;
     }
 
 }

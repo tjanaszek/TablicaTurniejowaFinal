@@ -105,7 +105,6 @@ public class ApplicationControllers {
         int idWygrany;
         Game actualgame=gameJDBCDAO.findGameId(idGame);
         if(wynik.equals("Player1")) {
-            System.out.println("here");
             idWygrany = actualgame.getIdPlayer1();
         }
         else if(wynik.equals("Player2")) {
@@ -113,7 +112,6 @@ public class ApplicationControllers {
         }
         else
             idWygrany=1;
-        System.out.println("Gra "+ idGame+", wygrał "+idWygrany);
         gameJDBCDAO.updategameresultAdmin(idGame, idWygrany);
         return "dodajwynikigraczy";
     }
@@ -135,6 +133,7 @@ public class ApplicationControllers {
     //na stronie zawodnika
     @RequestMapping("/rejestrujnaturniej")
     public String regtotour(@RequestParam(value="id", required=true) int id, Model model){
+        currentUser.setIdTournament(id);
         userRepo.updatetournamentforuser(currentUser.getuser_name(), Integer.toString(id));
         return "stronazawodnika";
     }
