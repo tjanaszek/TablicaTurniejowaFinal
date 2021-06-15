@@ -57,7 +57,7 @@ public class GameJDBCDAO {
     public ArrayList<Game> findAllGames(int id) {
         ArrayList<Game> games = new ArrayList<>();
         try {
-            String queryString = "SELECT * FROM game WHERE id_p1 = ? AND result_p1 IS NULL";
+            String queryString = "SELECT * FROM game WHERE id_p1 = ? AND result_p1 IS NULL AND game_result IS NOT NULL";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, id);
@@ -66,10 +66,39 @@ public class GameJDBCDAO {
                 System.out.println("Tutaj");
                 games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
             }
-            queryString = "SELECT * FROM game WHERE id_p2 = ? AND result_p2 IS NULL";
+            queryString = "SELECT * FROM game WHERE id_p2 = ? AND result_p2 IS NULL AND game_result IS NOT NULL";
             connection = getConnection();
             ptmt = connection.prepareStatement(queryString);
             ptmt.setInt(1, id);
+            resultSet = ptmt.executeQuery();
+            while (resultSet.next()) {
+                games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return games;
+    }
+
+    public ArrayList<Game> findAllGamesAdmin() {
+        ArrayList<Game> games = new ArrayList<>();
+        try {
+            String queryString = "SELECT * FROM game WHERE game_result IS NULL";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
             resultSet = ptmt.executeQuery();
             while (resultSet.next()) {
                 games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
@@ -139,6 +168,61 @@ public class GameJDBCDAO {
         }
     }
 
+    public void updategameresultAdmin(int idGame, int idUser) {
+        try {
+            String queryString = "UPDATE game SET game_result=? WHERE id_g=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, idUser);
+            ptmt.setInt(2, idGame);
+            ptmt.executeUpdate();
+            System.out.println("Table Updated Successfully");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
+    public Game findGameId(int id) {
+        Game game = new Game();
+        try {
+            String queryString = "SELECT * FROM game WHERE id_g=?";
+            connection = getConnection();
+            ptmt = connection.prepareStatement(queryString);
+            ptmt.setInt(1, id);
+            resultSet = ptmt.executeQuery();
+            resultSet.next();
+            game=(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (resultSet != null)
+                    resultSet.close();
+                if (ptmt != null)
+                    ptmt.close();
+                if (connection != null)
+                    connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return game;
+    }
 
 }

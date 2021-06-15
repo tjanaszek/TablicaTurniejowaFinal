@@ -94,6 +94,29 @@ public class ApplicationControllers {
         model.addAttribute("tournaments", tournamentJDBCDAO.findAll());
         return "turnieje";
     }
+    @RequestMapping("/addResulstByAdmin")
+    public String addResulstByAdmin(Model model){
+        model.addAttribute("games", gameJDBCDAO.findAllGamesAdmin());
+        return "dodajwynikigraczy";
+    }
+
+    @RequestMapping("/wynikiostateczne")
+    public String addfinalresults(@RequestParam(value="idGame", required=true) int idGame,@RequestParam(value="wynik", required=true) String wynik, Model model){
+        int idWygrany;
+        Game actualgame=gameJDBCDAO.findGameId(idGame);
+        if(wynik.equals("Player1")) {
+            System.out.println("here");
+            idWygrany = actualgame.getIdPlayer1();
+        }
+        else if(wynik.equals("Player2")) {
+            idWygrany = actualgame.getIdPlayer2();
+        }
+        else
+            idWygrany=1;
+        System.out.println("Gra "+ idGame+", wygrał "+idWygrany);
+        gameJDBCDAO.updategameresultAdmin(idGame, idWygrany);
+        return "dodajwynikigraczy";
+    }
     @RequestMapping("/closeRegister")
     public String closeRegister(@RequestParam(value="id", required=true) String id, @RequestParam(value="action", required=true) String action, Model model){
         if(action.equals("close")) {
@@ -112,17 +135,12 @@ public class ApplicationControllers {
     //na stronie zawodnika
     @RequestMapping("/rejestrujnaturniej")
     public String regtotour(@RequestParam(value="id", required=true) int id, Model model){
-        System.out.println(id);
-        currentUser.setIdTournament(id);
         userRepo.updatetournamentforuser(currentUser.getuser_name(), Integer.toString(id));
-        System.out.println(currentUser.getuser_name());
         return "stronazawodnika";
     }
 
     @RequestMapping("/dodajwynik")
     public String addResult(@RequestParam(value="id", required=true) int id, @RequestParam(value="wynik", required=true) String wynik, Model model){
-        System.out.println(id);
-        System.out.println(wynik);
         gameJDBCDAO.updategameresult(currentUser.getidUser(), id, wynik);
         return "stronazawodnika";
     }
@@ -130,7 +148,6 @@ public class ApplicationControllers {
     @RequestMapping("/zapiszsie")
     public String showtournamentstosign(Model model){
         model.addAttribute("tournaments", tournamentJDBCDAO.findAllOpen(currentUser));
-        System.out.println(currentUser.getuser_name()+ " " +currentUser.hasIdTournament()+ " "+ currentUser.idTournament);
         return "dolaczdoturnieju";
     }
     @RequestMapping("/wyniki")
