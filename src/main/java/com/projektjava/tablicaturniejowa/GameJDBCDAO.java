@@ -74,7 +74,9 @@ public class GameJDBCDAO {
             ptmt.setInt(1, id);
             resultSet = ptmt.executeQuery();
             while (resultSet.next()) {
-                games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"),resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+                if (!(isTournamentOpen(resultSet.getInt("id_t")))) {
+                    games.add(new Game(resultSet.getInt("id_g"), resultSet.getInt("id_t"), resultSet.getInt("id_p1"), resultSet.getInt("result_p1"), resultSet.getInt("id_p2"), resultSet.getInt("result_p2"), resultSet.getInt("game_result")));
+                }
             }
         } catch (SQLException e) {
             e.printStackTrace();
