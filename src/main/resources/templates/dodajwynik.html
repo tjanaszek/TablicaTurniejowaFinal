@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Logowanie</title>
+    <link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet'>
+    <style type="text/css">
+    body{
+      text-align: center;
+      background: #c0c0c0;
+      font-family: Montserrat;
+    }
+    h1{
+      margin-top: 30px;
+      letter-spacing: 3px;
+    }
+    form{
+            text-align: center;
+            width: 30%;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            margin-top: 100px;
+            margin-left: 35%;
+            background: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            border-radius: 5px;
+        }
+    p{
+      padding-top: 20px;
+      text-align: center;
+    }
+    input {
+      margin: 20px;
+      width: 60%;
+    }
+    .button{
+            font-family: Montserrat;
+            border-radius: 5px;
+            background-color:#6a7b8b;
+            color: white;
+            box-shadow: 1px 1px 5px #6a7b8b;
+            width: 60%;
+            height: 30px;
+            margin-top: 20px;
+        }
+
+  </style>
+</head>
+<body>
+<h1>Turnieje</h1>
+<form action="#" data-th-action="@{/dodajwynik}" method="post">
+    <select th:name="id">
+        <tr th:each="game: ${games}">
+            <option th:value="${game.getIdGame}"><td th:text="${game.getIdGame}"></td>
+                <td th:text="${game.getIdTournament}"></td>
+                <br><br>
+        </tr>
+    </select>
+    <select th:name="wynik">
+            <option th:value="wygrana"><td th:text="wygrana"></td>
+            <option th:value="przegrana"><td th:text="przegrana"></td>
+            <option th:value="remis"><td th:text="remis"></td>
+    </select>
+    <br>
+    <button class="button" type="submit" >Zapisz wynik</button>
+</form>
+</body>
+</html>

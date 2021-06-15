@@ -180,7 +180,6 @@ public class UserJDBCDAO {
                 e.printStackTrace();
             }
         }
-        //return user;
     }
 
     public void creategames(String id, String username) {

@@ -11,6 +11,7 @@ public class ApplicationControllers {
 
     UserJDBCDAO userRepo = new UserJDBCDAO();
     TournamentJDBCDAO tournamentJDBCDAO = new TournamentJDBCDAO();
+    GameJDBCDAO gameJDBCDAO = new GameJDBCDAO();
 
     User currentUser = new User();
 
@@ -117,9 +118,22 @@ public class ApplicationControllers {
         return "stronazawodnika";
     }
 
+    @RequestMapping("/dodajwynik")
+    public String addResult(@RequestParam(value="id", required=true) int id, @RequestParam(value="wynik", required=true) String wynik, Model model){
+        System.out.println(id);
+        System.out.println(wynik);
+        gameJDBCDAO.updategameresult(currentUser.getidUser(), id, wynik);
+        return "stronazawodnika";
+    }
+
     @RequestMapping("/zapiszsie")
     public String showtournamentstosign(Model model){
         model.addAttribute("tournaments", tournamentJDBCDAO.findAllOpen());
         return "dolaczdoturnieju";
+    }
+    @RequestMapping("/wyniki")
+    public String showgames(Model model){
+        model.addAttribute("games", gameJDBCDAO.findAllGames(currentUser.getidUser()));
+        return "dodajwynik";
     }
 }
