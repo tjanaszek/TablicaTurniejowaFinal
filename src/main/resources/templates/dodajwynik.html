@@ -51,7 +51,10 @@
 <form action="#" data-th-action="@{/dodajwynik}" method="post">
     <select th:name="id">
         <tr th:each="game: ${games}">
-            <option th:value="${game.getIdGame}"><td th:text="${game.getIdGame}"></td>
+            <option th:value="${game.getIdGame}">
+                Mecz nr
+                <td th:text="${game.getIdGame}"></td>
+                Turniej nr
                 <td th:text="${game.getIdTournament}"></td>
                 <br><br>
         </tr>
