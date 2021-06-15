@@ -113,6 +113,7 @@ public class ApplicationControllers {
     @RequestMapping("/rejestrujnaturniej")
     public String regtotour(@RequestParam(value="id", required=true) int id, Model model){
         System.out.println(id);
+        currentUser.setIdTournament(id);
         userRepo.updatetournamentforuser(currentUser.getuser_name(), Integer.toString(id));
         System.out.println(currentUser.getuser_name());
         return "stronazawodnika";
@@ -128,7 +129,8 @@ public class ApplicationControllers {
 
     @RequestMapping("/zapiszsie")
     public String showtournamentstosign(Model model){
-        model.addAttribute("tournaments", tournamentJDBCDAO.findAllOpen());
+        model.addAttribute("tournaments", tournamentJDBCDAO.findAllOpen(currentUser));
+        System.out.println(currentUser.getuser_name()+ " " +currentUser.hasIdTournament()+ " "+ currentUser.idTournament);
         return "dolaczdoturnieju";
     }
     @RequestMapping("/wyniki")

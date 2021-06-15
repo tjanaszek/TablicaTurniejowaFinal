@@ -25,6 +25,11 @@ public class User {
     @Column(nullable = false)
     public int admin;
 
+    @Column(nullable = true)
+    public Integer idTournament;
+
+
+
 
     /*public enum admin {
         zawodnik, administrator;
@@ -54,13 +59,24 @@ public class User {
         this.admin = adm;
     }*/
 
-    public User(String name, String surname, String user_name, String password, int idUser, int admin ) {
+    public boolean hasIdTournament() {
+        if(idTournament==0 || idTournament==null)
+            return false;
+        return true;
+    }
+
+    public void setIdTournament(int idTournament) {
+        this.idTournament = idTournament;
+    }
+
+    public User(String name, String surname, String user_name, String password, int idUser, int admin, int idTournament ) {
         this.name = name;
         this.surname = surname;
         this.user_name = user_name;
         this.password = password;
         this.idUser=idUser;
         this.admin=admin;
+        this.idTournament=idTournament;
     }
 
 

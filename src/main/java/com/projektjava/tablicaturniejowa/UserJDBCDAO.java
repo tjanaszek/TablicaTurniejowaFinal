@@ -134,7 +134,7 @@ public class UserJDBCDAO {
             ptmt = connection.prepareStatement(queryString);
             resultSet = ptmt.executeQuery();
             resultSet.next();
-            user = new User(resultSet.getString("name"), resultSet.getString("surname"), resultSet.getString("user_name"), resultSet.getString("password"), resultSet.getInt("id_u"),resultSet.getInt("admin") );
+            user = new User(resultSet.getString("name"), resultSet.getString("surname"), resultSet.getString("user_name"), resultSet.getString("password"), resultSet.getInt("id_u"),resultSet.getInt("admin") , resultSet.getInt("id_t"));
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {

@@ -161,8 +161,10 @@ public class TournamentJDBCDAO {
         }
     }
 
-    public ArrayList<TournamentBean> findAllOpen() {
+    public ArrayList<TournamentBean> findAllOpen(User user) {
         ArrayList<TournamentBean> tournaments = new ArrayList<>();
+        if(user.hasIdTournament())
+            return tournaments;
         try {
             String queryString = "SELECT * FROM tournament WHERE is_open = 1";
             connection = getConnection();
