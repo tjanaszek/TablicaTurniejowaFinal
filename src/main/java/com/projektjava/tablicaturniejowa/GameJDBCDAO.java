@@ -23,6 +23,8 @@ public class GameJDBCDAO {
     }
 
 
+
+
     public boolean add(Game gameBean) {
         try {
             String queryString = "INSERT INTO game(id_t, id_p1, id_p2) VALUES(?,?,?)";

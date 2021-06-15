@@ -110,8 +110,9 @@ public class ApplicationControllers {
 
     //na stronie zawodnika
     @RequestMapping("/rejestrujnaturniej")
-    public String regtotour(@RequestParam(value="id", required=true) String id, Model model){
-        userRepo.updatetournamentforuser(currentUser.getuser_name(), id);
+    public String regtotour(@RequestParam(value="id", required=true) int id, Model model){
+        System.out.println(id);
+        userRepo.updatetournamentforuser(currentUser.getuser_name(), Integer.toString(id));
         System.out.println(currentUser.getuser_name());
         return "stronazawodnika";
     }
