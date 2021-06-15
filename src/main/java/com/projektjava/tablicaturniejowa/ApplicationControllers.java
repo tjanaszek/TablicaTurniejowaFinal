@@ -100,10 +100,10 @@ public class ApplicationControllers {
             System.out.println("Zamknięto rejestrację");
             tournamentJDBCDAO.closeRegister(id);
         }
-        else if(action.equals("join")){
-            System.out.println("Dołączono do turnieju");
-            //dołącz do turnieju
-            tournamentJDBCDAO.closeRegister(id);
+        else if(action.equals("end")){
+            System.out.println("Zakończono turniej");
+            //zakończ turniej
+            tournamentJDBCDAO.endTournament(id);
         }
         model.addAttribute("tournaments", tournamentJDBCDAO.findAll());
         return "turnieje";
